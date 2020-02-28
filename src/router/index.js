@@ -10,6 +10,8 @@ import Game from '../views/bbs/Game'
 import Personal from '../views/bbs/Personal'
 import Login from '../views/bbs/Login'
 import Register from '../views/bbs/Register'
+import Main from '../views/manage/Main'
+import Statistics from '../views/manage/Statistics'
 Vue.use(VueRouter)
 
 const routes = [
@@ -39,6 +41,16 @@ const routes = [
     name: 'Register',
     component: Register
   },
+  {
+    path: '/main',
+    redirect: '/main/statistics',
+    components: {
+      default: Main
+    },
+    children: [
+      { path: '/main/statistics', component: Statistics }
+    ]
+  }
   // {
   //   path: '/about',
   //   name: 'About',
