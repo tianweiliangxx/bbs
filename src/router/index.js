@@ -7,6 +7,7 @@ import CBA from '../views/bbs/CBA'
 import Relaxation from '../views/bbs/Relaxation'
 import Article from '../views/bbs/Article'
 import Game from '../views/bbs/Game'
+import Personal from '../views/bbs/Personal'
 import Login from '../views/bbs/Login'
 import Register from '../views/bbs/Register'
 Vue.use(VueRouter)
@@ -25,6 +26,7 @@ const routes = [
       {path: '/index/relaxation', component: Relaxation},
       {path: '/index/game', component: Game},
       {path: '/index/article', component: Article},
+      {path: '/index/personal', component: Personal},
     ]
   },
   {
