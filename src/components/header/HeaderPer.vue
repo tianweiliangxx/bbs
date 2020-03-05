@@ -1,15 +1,19 @@
 <template>
     <div class="headerPer">
         <ul class="perInfo">
-            <li class="login" v-if="false"><router-link to="/index/login">登录</router-link> / <router-link to="/index/register">注册</router-link></li>
-            <li class="person"><router-link to="/index/personal">张飞</router-link></li>
+            <li class="login" v-if="!isLogin"><router-link to="/index/login">登录</router-link> / <router-link to="/index/register">注册</router-link></li>
+            <li class="person" v-if="isLogin"><router-link to="/index/personal">{{userInfo.userName}}</router-link></li>
         </ul>
     </div>
 </template>
 
 <script>
+    import { mapState } from 'vuex'
     export default {
         name: "HeaderPer",
+        computed: {
+            ...mapState(['isLogin', 'userInfo'])
+        }
     }
 </script>
 

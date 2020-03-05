@@ -8,19 +8,29 @@ import Relaxation from '../views/bbs/Relaxation'
 import Article from '../views/bbs/Article'
 import Game from '../views/bbs/Game'
 import Personal from '../views/bbs/Personal'
+import OtherUser from "../views/bbs/OtherUser"
 import Login from '../views/bbs/Login'
 import Register from '../views/bbs/Register'
 import Main from '../views/manage/Main'
+import ManLogin from '../views/manage/ManLogin'
 import Statistics from '../views/manage/Statistics'
+import UserManagement from '../views/manage/UserManagement'
+import PostManagement from '../views/manage/PostManagement'
+
 Vue.use(VueRouter)
 
 const routes = [
   {
+      path: '*',
+      redirect: '/index',
+  },
+  {
     path: '/index',
     name: 'Index',
     component: Index,
+    redirect: '/index/newest',
     children: [
-      {path: '/index/login', component: Login},
+      {path: '/index/login',name:'login', component: Login},
       {path: '/index/register', component: Register},
       {path: '/index/newest', component: Newest},
       {path: '/index/nba', component: NBA},
@@ -29,27 +39,25 @@ const routes = [
       {path: '/index/game', component: Game},
       {path: '/index/article', component: Article},
       {path: '/index/personal', component: Personal},
+      {path: '/index/otheruser', component: OtherUser},
     ]
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: Login
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    component: Register
-  },
-  {
     path: '/main',
-    redirect: '/main/statistics',
+    redirect: '/main/manlogin',
     components: {
       default: Main
     },
     children: [
-      { path: '/main/statistics', component: Statistics }
+      { path: '/main/statistics',name:'Statistics', component: Statistics },
+      { path: '/main/userManagement',name:'UserManagement', component: UserManagement },
+      { path: '/main/postManagement',name:'PostManagement', component: PostManagement }
     ]
+  },
+  {
+    path: '/main/manlogin',
+    name:'ManLogin',
+    component: ManLogin
   }
   // {
   //   path: '/about',
@@ -66,5 +74,24 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
-
+router.beforeEach((to, from, next) => {
+  let nextRoute = ['Statistics', 'UserManagement', 'PostManagement']
+  if (nextRoute.indexOf(to.name) >= 0) {
+    if (localStorage.isAdminLogin) {
+      next()
+    }else{
+      alert('您还未登录')
+      router.push({path:"/main/manlogin"})
+    }
+  }
+  if(to.name === 'ManLogin' && localStorage.isAdminLogin){
+    alert('您已经登录了')
+    router.push({path:"/main/statistics"})
+  }
+  if(to.name === 'login' && localStorage.isLogin){
+    alert('您已经登录了')
+    router.push({path:"/index/newest"})
+  }
+  next()
+})
 export default router

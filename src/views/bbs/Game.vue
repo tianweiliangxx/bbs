@@ -162,7 +162,7 @@
 <style lang="stylus" scoped>
     .newest
         width: 100%
-        margin-top 4px
+        margin-top 48px
         .content
             width 80%
             margin: 0 auto
@@ -306,8 +306,9 @@
                 }
             .right
                 width 30%
-                height 619px
-                margin-left 8%
+                height 450px
+                margin-left 40px
+                margin-top 40px
                 background-color #fff
                 float left
             ul

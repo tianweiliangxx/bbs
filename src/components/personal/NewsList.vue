@@ -1,40 +1,54 @@
 <template>
     <div class="NewsList">
         <div class="title">
-            <h2>新闻列表</h2>
+            <h2>帖子列表</h2>
         </div>
         <div class="content">
             <ul class="left">
-                <li class="Llist">实时更新：新型冠状病毒肺炎全国疫情地图</li>
-                <li class="Llist">实时更新：新型冠状病毒肺炎全国疫情地图</li>
-                <li class="Llist">实时更新：新型冠状病毒肺炎全国疫情地图</li>
-                <li class="Llist">实时更新：新型冠状病毒肺炎全国疫情地图</li>
-                <li class="Llist">实时更新：新型冠状病毒肺炎全国疫情地图</li>
-                <li class="Llist">实时更新：新型冠状病毒肺炎全国疫情地图</li>
+
+                <li class="Llist" v-for="item in this.postList"><router-link :to=" { path:'/index/article', query: {id: item.id} }">{{item.title}}</router-link></li>
             </ul>
             <ul class="right">
-                <li class="Rlist"><i class="el-icon-time"></i>2020年2月28日11:34:28</li>
-                <li class="Rlist"><i class="el-icon-time"></i>2020年2月28日11:34:28</li>
-                <li class="Rlist"><i class="el-icon-time"></i>2020年2月28日11:34:28</li>
-                <li class="Rlist"><i class="el-icon-time"></i>2020年2月28日11:34:28</li>
-                <li class="Rlist"><i class="el-icon-time"></i>2020年2月28日11:34:28</li>
-                <li class="Rlist"><i class="el-icon-time"></i>2020年2月28日11:34:28</li>
+                <li class="Rlist" v-for="item in this.postList"><i class="el-icon-time">{{item.create_time}}</i></li>
             </ul>
         </div>
-        <el-pagination
-                background
-                layout="prev, pager, next"
-                :total="1000">
-        </el-pagination>
+        <div class="page">
+            <el-pagination
+                    background
+                    layout="prev, pager, next"
+                    :total="totalPage*10"
+                    :page-size="10"
+                    @current-change = 'changePage'>
+            </el-pagination>
+        </div>
     </div>
 </template>
 
 <script>
+    import {userPostList} from '../../api/index'
     export default {
         name: "NewsList",
         data () {
             return {
-                radio: ''
+                radio: '',
+                postList:'',
+                postTime:'',
+                totalPage:''
+            }
+        },
+        mounted() {
+            userPostList(localStorage.userId,1).then(res => {
+                console.log(res);
+                this.postList = res.data.data.post_list
+                this.totalPage = res.data.data.total_page
+            })
+        },
+        methods: {
+            changePage(e){
+                userPostList(localStorage.userId,e).then(res => {
+                    console.log(res);
+                    this.postList = res.data.data.post_list
+                })
             }
         }
     }
@@ -50,19 +64,24 @@
             font-size 28px
         .content
             overflow hidden
+            height 460px
             .left
                 float: left
                 .Llist
                     width 540px
-                    height 60px
-                    line-height 60px
+                    height 42px
+                    line-height 42px
                     border-bottom 1px solid #ccc
             .right
                 float:left
                 .Rlist
                     font-size 12px
                     width 160px
-                    height 60px
-                    line-height 60px
+                    height 42px
+                    line-height 42px
                     border-bottom 1px solid #ccc
+        .page
+            position absolute
+            left 830px
+            bottom 100px
 </style>

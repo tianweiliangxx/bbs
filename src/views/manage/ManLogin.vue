@@ -2,7 +2,7 @@
     <div class="jobsLogin">
         <div class="cut"></div>
         <div class="loginBox">
-            <div class="title"><h2>登录</h2></div>
+            <div class="title"><h2>管理员登录</h2></div>
             <div class="content">
                 <el-form
                         :model="ruleForm2"
@@ -23,15 +23,14 @@
                     </el-form-item>
                 </el-form>
             </div>
-            <div class="tip">没有账号?
-                <router-link to="/index/register" class="toReg">请注册</router-link></div>
         </div>
     </div>
 </template>
 
 <script>
     import { mapMutations  } from 'vuex'
-    import { login } from '../../api'
+    // import { login } from '../../api'
+    import { adminLogin } from '../../api'
     export default {
         name: "Login",
         data() {
@@ -63,26 +62,43 @@
                 let oneself = this
                 this.$refs[formName].validate(valid => {
                     if (valid) {
-                        login(this.$refs[formName].model.userName, this.$refs[formName].model.pass).then(res =>{
+                        adminLogin(this.$refs[formName].model.userName, this.$refs[formName].model.pass).then(res => {
                             console.log(res);
                             if (res.data.errmsg === '用户名密码错误') {
                                 alert('登陆失败，用户名或密码错误')
                             }
                             if (res.data.errmsg === '登录成功') {
-                                localStorage.username = res.data.dict.nick_name
-                                localStorage.userId = res.data.dict.user_id
-                                localStorage.isLogin = true
-                                oneself.getUserInfo([res.data.dict.nick_name,res.data.dict.user_id])
+                                localStorage.adminId = res.data.user_id
+                                localStorage.isAdminLogin = true
                                 setTimeout(() => {
                                     alert('登录成功')
                                     this.$router.push({
-                                        path: "/index/newest"
+                                        path: "/main/statistics",
+                                        query: {id: res.data.user_id}
                                     });
                                 }, 400);
                             }
-                        }).catch(err => {
-                            console.log(err);
                         })
+                        // login(this.$refs[formName].model.userName, this.$refs[formName].model.pass).then(res =>{
+                        //     console.log(res);
+                        //     if (res.data.errmsg === '用户名密码错误') {
+                        //         alert('登陆失败，用户名或密码错误')
+                        //     }
+                        //     if (res.data.errmsg === '登录成功') {
+                        //         localStorage.username = res.data.dict.nick_name
+                        //         localStorage.userId = res.data.dict.user_id
+                        //         localStorage.isLogin = true
+                        //         oneself.getUserInfo([res.data.dict.nick_name,res.data.dict.user_id])
+                        //         setTimeout(() => {
+                        //             alert('登录成功')
+                        //             this.$router.push({
+                        //                 path: "/index/newest"
+                        //             });
+                        //         }, 400);
+                        //     }
+                        // }).catch(err => {
+                        //     console.log(err);
+                        // })
                     } else {
                         alert('登录失败')
                         return false;

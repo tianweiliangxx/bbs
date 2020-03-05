@@ -4,100 +4,98 @@
         <div class="loginBox">
             <div class="title"><h2>注册</h2></div>
             <div class="content">
-                <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                    <el-form-item label="密码" prop="pass">
-                        <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+                <el-form
+                        :model="ruleForm2"
+                        status-icon
+                        :rules="rules2"
+                        ref="ruleForm2"
+                        label-width="0"
+                        class="demo-ruleForm"
+                >
+                    <el-form-item prop="tel">
+                        <el-input v-model="ruleForm2.userName" auto-complete="off" placeholder="请输入用户名"></el-input>
                     </el-form-item>
-                    <el-form-item label="确认密码" prop="checkPass">
-                        <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+                    <el-form-item prop="pass">
+                        <el-input type="password" v-model="ruleForm2.pass" auto-complete="off" placeholder="输入密码"></el-input>
                     </el-form-item>
-                    <el-form-item label="年龄" prop="age">
-                        <el-input v-model.number="ruleForm.age"></el-input>
+                    <el-form-item prop="checkPass">
+                        <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="确认密码"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-                        <el-button @click="resetForm('ruleForm')">重置</el-button>
+                        <el-button type="primary" @click="submitForm('ruleForm2')" style="width:100%;">注册</el-button>
                     </el-form-item>
                 </el-form>
             </div>
             <div class="tip">已有账号?
-                <router-link to="/login" class="toReg">请登录</router-link></div>
+                <router-link to="/index/login" class="toReg">请登录</router-link></div>
         </div>
     </div>
 </template>
 
 <script>
+    import { register } from '../../api/index'
     export default {
         name: "Register",
         data() {
-            var checkAge = (rule, value, callback) => {
-                if (!value) {
-                    return callback(new Error('年龄不能为空'));
-                }
-                setTimeout(() => {
-                    if (!Number.isInteger(value)) {
-                        callback(new Error('请输入数字值'));
-                    } else {
-                        if (value < 18) {
-                            callback(new Error('必须年满18岁'));
-                        } else {
-                            callback();
-                        }
-                    }
-                }, 1000);
-            };
-            var validatePass = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入密码'));
+            // <!--验证密码-->
+            let validatePass = (rule, value, callback) => {
+                if (value === "") {
+                    callback(new Error("请输入密码"))
                 } else {
-                    if (this.ruleForm.checkPass !== '') {
-                        this.$refs.ruleForm.validateField('checkPass');
+                    if (this.ruleForm2.checkPass !== "") {
+                        this.$refs.ruleForm2.validateField("checkPass");
                     }
-                    callback();
+                    callback()
                 }
-            };
-            var validatePass2 = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请再次输入密码'));
-                } else if (value !== this.ruleForm.pass) {
-                    callback(new Error('两次输入密码不一致!'));
+            }
+            // <!--二次验证密码-->
+            let validatePass2 = (rule, value, callback) => {
+                if (value === "") {
+                    callback(new Error("请再次输入密码"));
+                } else if (value !== this.ruleForm2.pass) {
+                    callback(new Error("两次输入密码不一致!"));
                 } else {
                     callback();
                 }
             };
             return {
-                ruleForm: {
-                    pass: '',
-                    checkPass: '',
-                    age: ''
+                ruleForm2: {
+                    pass: "",
+                    checkPass: "",
+                    userName: "",
                 },
-                rules: {
-                    pass: [
-                        { validator: validatePass, trigger: 'blur' }
-                    ],
-                    checkPass: [
-                        { validator: validatePass2, trigger: 'blur' }
-                    ],
-                    age: [
-                        { validator: checkAge, trigger: 'blur' }
-                    ]
-                }
-            };
+                rules2: {
+                    pass: [{ validator: validatePass, trigger: 'change' }],
+                    checkPass: [{ validator: validatePass2, trigger: 'change' }],
+                },
+                isDisabled: false, // 是否禁止点击发送验证码按钮
+                flag: true
+            }
         },
         methods: {
             submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
+                this.$refs[formName].validate(valid => {
                     if (valid) {
-                        alert('submit!');
+                        register(this.$refs[formName].model.userName, this.$refs[formName].model.pass).then( res => {
+                            console.log(res)
+                            setTimeout(() => {
+                                alert('注册成功')
+                            }, 400);
+                        }).catch(err => {
+                            console.log(err)
+                        })
                     } else {
-                        console.log('error submit!!');
+                        console.log("error submit!!");
                         return false;
                     }
+                })
+            },
+            // <!--进入登录页-->
+            gotoLogin() {
+                this.$router.push({
+                    path: "/login"
                 });
             },
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
-            }
         }
     }
 </script>
@@ -124,6 +122,7 @@
                     text-align center
                     font-size 26px
             .content
+                margin 0 auto
                 margin-top 10px
                 width 80%
             .tip

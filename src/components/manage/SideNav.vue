@@ -2,9 +2,9 @@
     <div class="SideNav">
         <div class="LeftNav">
             <ul class="NavTitle">
-                <li class="stair">用户统计</li>
-                <li class="stair">用户管理</li>
-                <li class="stair">新闻管理</li>
+                <router-link to="/main/statistics"><li class="stair">用户统计</li></router-link>
+                <router-link to="/main/userManagement"><li class="stair">用户管理</li></router-link>
+                <router-link to="/main/postManagement"><li class="stair">帖子管理</li></router-link>
             </ul>
         </div>
     </div>
@@ -23,13 +23,13 @@
             width 100%
             position relative
             .NavTitle
-                color #fff
                 .stair
                     height 40px
                     line-height 40px
                     text-align left
                     border-bottom 1px solid #ccc
                     padding 0 0 0 10px
+                    color #fff
                     &:hover
                         cursor pointer
                         background-color rgba(245, 245, 245, .7)

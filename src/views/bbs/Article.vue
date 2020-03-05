@@ -3,105 +3,36 @@
         <div class="content">
             <div class="left">
                 <div class="card">
-                    <h1>新闻标题</h1>
-                    <span>2020年2月27日15:40:45</span>
+                    <h1>{{this.postInfo.title}}</h1>
+                    <span>时间：{{this.postInfo.create_time}}</span>
                     <div class="split"></div>
                     <p><b>播音</b></p>
-                    <p><b>作者</b></p>
-                    <p><b>要闻</b></p>
-                    <p>新闻内容</p>
-                    <p>在越来越多的证据显示疫情将对韩国经济造成打击的情况下，韩国央行周四意外维持主要利率保持不变，但下调了对今年的增长预期。
-
-                        韩国央行政策委员会将基准利率稳定在 1.25％，而市场普遍预期韩国央行会降息 25 个基点以抵御持续扩散的疫情影响。
-
-                        但韩国央行下调了今年的经济预期，预测今年经济增长 2.1％，低于 11 月份预测的 2.3％，以反映出疫情对经济影响的不确定性。
-
-                        在韩国央行利率决定公布后，韩元兑美元汇率一度大幅上涨但随后回落，而三年期国债期货合约则下跌。</p>
+                    <p><b>作者: <router-link :to="{path:'/index/otheruser', query: {id: this.author.id}}">{{this.author.nick_name}}</router-link></b></p>
+                    <p><b>概要：{{this.postInfo.digest}}</b></p>
+                    <p>新闻内容:</p>
+                    <div v-html="this.postInfo.content"></div>
                 </div>
                 <div class="collect">
-                    <el-button type="primary" icon="el-icon-star-off" round>收藏</el-button>
+                    <el-button v-if="!this.data.is_collected" @click="followed(postInfo.id, 'collect')" type="primary" icon="el-icon-star-off" round>收藏</el-button>
+                    <el-button v-if="this.data.is_collected" @click="followed(postInfo.id, 'cancel_collect')" type="primary" icon="el-icon-star-on" round>取消收藏</el-button>
                 </div>
                 <div class="commentOn">
-                    <el-input v-model="input" placeholder="请输入内容"></el-input>
-                    <el-button type="success" icon="el-icon-check" circle></el-button>
+                    <el-input v-model="input" :placeholder="this.inputTip" style="width:50%;margin-left:40px"></el-input>
+                    <el-button type="success" @click="pushComment" title="提交评论" icon="el-icon-check" circle style="margin-left: 20px"></el-button>
                 </div>
                 <div class="comment">
-                    <p>6条评论</p>
+                    <p>{{comments.length}}条评论</p>
                     <ul>
-                        <li class="list">
+                        <li class="list" v-for="item in comments">
                             <div class="listL"></div>
                             <div class="listR">
-                                <p>176325895xxx</p>
-                                <p>这是我的评论</p>
+                                <p><router-link :to="{path:'/index/otheruser', query: {id: item.user.id}}">{{item.user.nick_name}}</router-link><span class="listRTitle" v-if="isShow(item.parent)">回复{{item.parent.content}}</span></p>
+                                <p>{{item.content}}</p>
                                 <div class="listRB">
-                                    <div class="sj">2020年2月27日16:34:18</div>
-                                    <div class="operation"><i class="el-icon-chat-line-square"></i>回复 <i class="el-icon-thumb"></i>点赞</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list">
-                            <div class="listL"></div>
-                            <div class="listR">
-                                <p>176325895xxx</p>
-                                <p>这是我的评论</p>
-                                <div class="listRB">
-                                    <div class="sj">2020年2月27日16:34:18</div>
-                                    <div class="operation"><i class="el-icon-chat-line-square"></i>回复 <i class="el-icon-thumb"></i>点赞</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list">
-                            <div class="listL"></div>
-                            <div class="listR">
-                                <p>176325895xxx</p>
-                                <p>这是我的评论</p>
-                                <div class="listRB">
-                                    <div class="sj">2020年2月27日16:34:18</div>
-                                    <div class="operation"><i class="el-icon-chat-line-square"></i>回复 <i class="el-icon-thumb"></i>点赞</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list">
-                            <div class="listL"></div>
-                            <div class="listR">
-                                <p>176325895xxx</p>
-                                <p>这是我的评论</p>
-                                <div class="listRB">
-                                    <div class="sj">2020年2月27日16:34:18</div>
-                                    <div class="operation"><i class="el-icon-chat-line-square"></i>回复 <i class="el-icon-thumb"></i>点赞</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list">
-                            <div class="listL"></div>
-                            <div class="listR">
-                                <p>176325895xxx</p>
-                                <p>这是我的评论</p>
-                                <div class="listRB">
-                                    <div class="sj">2020年2月27日16:34:18</div>
-                                    <div class="operation"><i class="el-icon-chat-line-square"></i>回复 <i class="el-icon-thumb"></i>点赞</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list">
-                            <div class="listL"></div>
-                            <div class="listR">
-                                <p>176325895xxx</p>
-                                <p>这是我的评论</p>
-                                <div class="listRB">
-                                    <div class="sj">2020年2月27日16:34:18</div>
-                                    <div class="operation"><i class="el-icon-chat-line-square"></i>回复 <i class="el-icon-thumb"></i>点赞</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list">
-                            <div class="listL"></div>
-                            <div class="listR">
-                                <p>176325895xxx</p>
-                                <p>这是我的评论</p>
-                                <div class="listRB">
-                                    <div class="sj">2020年2月27日16:34:18</div>
-                                    <div class="operation"><i class="el-icon-chat-line-square"></i>回复 <i class="el-icon-thumb"></i>点赞</div>
+                                    <div class="sj">{{item.create_time}}</div>
+                                    <div class="operation">
+                                        <i class="el-icon-chat-line-square iconStyle" @click="reply(item.id, item.user.nick_name)">回复</i> <i class="el-icon-thumb iconStyle" ><span v-if="!item.is_like" @click="giveLike(item.id)">点赞</span><span v-if="item.is_like" @click="removeLike(item.id)">取消赞</span></i><i>  获赞数：{{item.like_count}}</i>
+                                    </div>
                                 </div>
                             </div>
                         </li>
@@ -124,12 +55,91 @@
 </template>
 
 <script>
+    import  {
+        postDetail,
+        newsCollect,
+        newsComment,
+        commentLike
+    } from '../../api/index'
+    import { mapState } from 'vuex'
     export default {
         name: "Newest",
         data () {
             return {
-                input:''
+                data:'',
+                input:'',
+                inputTip:'请输入评论',
+                id: this.$route.query.id,
+                postInfo:'',
+                author:'',
+                comments:'',
+                commentId: ''
             }
+        },
+        computed: {
+            ...mapState(['isLogin', 'userInfo']),
+        },
+        methods: {
+            followed (id, type) {
+                let oneself = this
+                newsCollect(id, type, localStorage.userId).then(res => {
+                    console.log(res);
+                    alert(res.data.errmsg)
+                    oneself.$router.go(0)
+                })
+            },
+            // 评论
+            pushComment () {
+                let oneself = this
+                if (this.commented === ''){
+                    newsComment(localStorage.userId, this.id, this.input).then(res => {
+                        console.log(res);
+                        alert('评论成功')
+                        oneself.$router.go(0)
+                    })
+                }else{
+                    newsComment(localStorage.userId, this.id, this.commentId, this.input).then(res => {
+                        console.log(res);
+                        alert(oneself.inputTip + '评论成功')
+                        oneself.$router.go(0)
+                    })
+                }
+            },
+            reply (id, nick_name) {
+                this.inputTip = '回复用户' + nick_name
+                this.commentId = id
+            },
+            giveLike (id) {
+                let oneself = this
+                commentLike(localStorage.userId, 'add', id).then(res => {
+                    alert('点赞成功')
+                    oneself.$router.go(0)
+                })
+            },
+            // 取消赞
+            removeLike (id) {
+                let oneself = this
+                commentLike(localStorage.userId, 'remove', id).then(res => {
+                    alert('取消成功')
+                    oneself.$router.go(0)
+                })
+            },
+            isShow (data) {
+                if(data === null || data === false) {
+                    return false
+                }else{
+                    return true
+                }
+            },
+        },
+        created() {
+            postDetail(this.id, localStorage.userId).then(res => {
+                console.log(res);
+                this.data = res.data.data
+                this.postInfo = res.data.data.post
+                this.author = res.data.data.post.author
+                this.comments = res.data.data.comments
+            })
         }
     }
 </script>
@@ -137,7 +147,7 @@
 <style lang="stylus" scoped>
     .article
         width: 100%
-        margin-top 4px
+        margin-top 48px
         .content
             width 80%
             margin: 0 auto
@@ -147,6 +157,7 @@
                 margin-left 2%
                 background-color #fff
                 float left
+                margin-bottom 60px
                 .card
                     margin 10px
                 .collect
@@ -161,6 +172,7 @@
                     .list
                         border-top 1px solid #ccc
                         overflow hidden
+                        margin-top 10px
                         .listL
                             width 30px
                             height 30px
@@ -172,7 +184,11 @@
                         .listR
                             margin-left 10px
                             float: left
+                            .listRTitle
+                                font-size 10px
                             .listRB
+                                position relative
+                                top 1px
                                 width 100%
                                 color: #ccc
                                 font-size 12px
@@ -184,6 +200,8 @@
                                     margin-left: 10px
                                     float right
                                     block inline
+                                    .iconStyle:hover
+                                        cursor: pointer
             .right
                 width 30%
                 height 619px

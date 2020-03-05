@@ -23,7 +23,7 @@
 <style lang="stylus" scoped>
     .header
         width: 100%
-        height:46px
+        height:48px !important
         position: relative
         background-color rgba(0,0,0,.7)
         background-size:100% 100%

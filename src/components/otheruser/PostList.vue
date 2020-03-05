@@ -1,11 +1,11 @@
 <template>
     <div class="NewsList">
         <div class="title">
-            <h2>帖子收藏</h2>
+            <h2>帖子列表</h2>
         </div>
         <div class="content">
             <ul class="left">
-                <li class="Llist" v-for="item in this.postList"><router-link :to=" { path:'/index/article', query:{id: item.id} }">{{item.title}}</router-link></li>
+                <li class="Llist" v-for="item in this.postList"><router-link :to=" { path:'/index/article', query: {id: item.id} }">{{item.title}}</router-link></li>
             </ul>
             <ul class="right">
                 <li class="Rlist" v-for="item in this.postList"><i class="el-icon-time">{{item.create_time}}</i></li>
@@ -24,29 +24,35 @@
 </template>
 
 <script>
-    import {Collection} from '../../api/index'
+    import {
+        userPostList,
+
+    } from '../../api/index'
     export default {
-        name: "Collect",
+        name: "PostList",
         data () {
             return {
                 radio: '',
                 postList:'',
                 postTime:'',
-                totalPage:''
+                totalPage:'',
+                id: this.$route.query.id,
+                otherInfo:'',
+                ifFollow:''
             }
         },
         mounted() {
-            Collection(localStorage.userId,1).then(res => {
+            userPostList(this.id,1).then(res => {
                 console.log(res);
-                this.postList = res.data.data.collections
+                this.postList = res.data.data.post_list
                 this.totalPage = res.data.data.total_page
             })
         },
         methods: {
             changePage(e){
-                Collection(localStorage.userId,e).then(res => {
+                userPostList(this.id,e).then(res => {
                     console.log(res);
-                    this.postList = res.data.data.collections
+                    this.postList = res.data.data.post_list
                 })
             }
         }

@@ -9,7 +9,7 @@
             <li class="el-menu-item icon">后台管理</li>
         </el-menu>
         <div class="userAdmin">
-            刘备
+            管理员{{this.id}}
         </div>
     </div>
 </template>
@@ -17,6 +17,11 @@
 <script>
     export default {
         name: 'HeadNav',
+        data() {
+            return{
+                id:localStorage.adminId,
+            }
+        },
         methods: {
             // 把点击的该项的值传给Index
             changeNav (name) {
