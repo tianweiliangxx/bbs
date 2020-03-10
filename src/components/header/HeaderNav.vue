@@ -8,11 +8,10 @@
                 mode="horizontal"
                 active-text-color="#ffd04b"
                 router>
-            <el-menu-item index="/index/newest" title="最新新闻">最新</el-menu-item>
-            <el-menu-item index="/index/nba" title="NBA新闻">NBA</el-menu-item>
-            <el-menu-item index="/index/cba" title="NBA新闻">CBA</el-menu-item>
-            <el-menu-item index="/index/relaxation" title="打开/关闭工具管理">步行街</el-menu-item>
-            <el-menu-item index="/index/game" title="打开/关闭资料下载功能">游戏区</el-menu-item>
+            <el-menu-item index="/index/nba" title="NBA">NBA</el-menu-item>
+            <el-menu-item index="/index/cba" title="CBA">CBA</el-menu-item>
+            <el-menu-item index="/index/relaxation" title="步行街">步行街</el-menu-item>
+            <el-menu-item index="/index/game" title="游戏区">游戏区</el-menu-item>
         </el-menu>
     </div>
 </template>
@@ -40,13 +39,13 @@
         width: 60px;
         margin-top: -1.2px;
     .el-menu--horizontal>.el-menu-item
-        height 60px
+        height 56px
         line-height:60px
         font-size 14px
     .el-menu--horizontal>.el-menu-item:hover
         background:rgba(96,98,102,.4) !important;
     .el-menu--horizontal .el-menu
-        background:rgba(0,0,0,.4) !important;
+        background:rgba(255,255,255,.4) !important;
     .nav-item
         float: left
         margin-left: 100px

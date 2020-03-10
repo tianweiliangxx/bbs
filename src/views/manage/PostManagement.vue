@@ -12,7 +12,7 @@
                     <th>操作</th>
                 </tr>
                 <tr class="user" v-for="(item,index) in UserManagementData.post_list">
-                    <th>{{item.title}}{{item.id}}</th>
+                    <th><router-link :to="{ path:'/index/article', query: {id: item.id} }">{{item.title}}</router-link></th>
                     <th>{{item.create_time}}</th>
                     <th><el-button @click="deletePost(item.id)" type="danger" icon="el-icon-delete" circle></el-button></th>
                 </tr>

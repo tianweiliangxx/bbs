@@ -5,6 +5,7 @@
                 <router-link to="/main/statistics"><li class="stair">用户统计</li></router-link>
                 <router-link to="/main/userManagement"><li class="stair">用户管理</li></router-link>
                 <router-link to="/main/postManagement"><li class="stair">帖子管理</li></router-link>
+                <li class="stair" @click="outAdmin()">退出账号</li>
             </ul>
         </div>
     </div>
@@ -12,7 +13,14 @@
 
 <script>
     export default {
-        name: 'SideNav'
+        name: 'SideNav',
+        methods:{
+            outAdmin(){
+                localStorage.clear()
+                alert('退出成功')
+                this.$router.go(0)
+            }
+        }
     }
 </script>
 

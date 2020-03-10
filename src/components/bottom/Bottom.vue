@@ -7,7 +7,7 @@
                 <li class="abstract one">招聘人才</li>
                 <li class="abstract">友情链接</li>
             </ul></li>
-            <li class="copyright">©️2019 毕业设计</li>
+            <li class="copyright">©️2020 毕业设计</li>
             <li class="phone">电话：1763584***</li>
         </ul>
     </div>

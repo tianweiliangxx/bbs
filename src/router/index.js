@@ -28,7 +28,7 @@ const routes = [
     path: '/index',
     name: 'Index',
     component: Index,
-    redirect: '/index/newest',
+    redirect: '/index/cba',
     children: [
       {path: '/index/login',name:'login', component: Login},
       {path: '/index/register', component: Register},
@@ -37,7 +37,7 @@ const routes = [
       {path: '/index/cba', component: CBA},
       {path: '/index/relaxation', component: Relaxation},
       {path: '/index/game', component: Game},
-      {path: '/index/article', component: Article},
+      {path: '/index/article', name:'Article', component: Article},
       {path: '/index/personal', component: Personal},
       {path: '/index/otheruser', component: OtherUser},
     ]
@@ -91,6 +91,10 @@ router.beforeEach((to, from, next) => {
   if(to.name === 'login' && localStorage.isLogin){
     alert('您已经登录了')
     router.push({path:"/index/newest"})
+  }
+  if(to.name === from.name){
+    next()
+    router.go(0)
   }
   next()
 })

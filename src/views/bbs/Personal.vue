@@ -1,12 +1,12 @@
 <template>
     <div class="personal">
         <div class="headImg">
-
+            <img class="hImg" :src="this.imgsPoto" alt="">
         </div>
         <div class="left">
             <ul class="menu">
                 <li class="list" @click="selectMenu('showInfo')">基本资料</li>
-                <li class="list" @click="selectMenu">头像设置</li>
+                <li class="list" @click="selectMenu('showHeadPortrait')">头像设置</li>
                 <li class="list" @click="selectMenu('showAttention')">我的关注</li>
                 <li class="list" @click="selectMenu('showChangePW')">密码修改</li>
                 <li class="list" @click="selectMenu('showCollect')">我的收藏</li>
@@ -17,6 +17,7 @@
         </div>
         <div class="right">
             <Perinfo v-show="show.showInfo"></Perinfo>
+            <HeadPortrait v-show="show.showHeadPortrait"></HeadPortrait>
             <Attention v-show="show.showAttention"></Attention>
             <ChangePW v-show="show.showChangePW"></ChangePW>
             <Collect v-show="show.showCollect"></Collect>
@@ -28,27 +29,32 @@
 
 <script>
     import Perinfo from '../../components/personal/Perinfo'
+    import HeadPortrait from '../../components/personal/HeadPortrait'
     import Attention from '../../components/personal/Attention'
     import ChangePW from '../../components/personal/ChangePW'
     import Collect from '../../components/personal/Collect'
     import Publications from '../../components/personal/Publications'
     import NewsList from '../../components/personal/NewsList'
+    import {passportavatar} from '../../api/index'
     export default {
         name: "Personal",
         data () {
             return {
                 show:{
                     showInfo: true,
+                    showHeadPortrait:false,
                     showAttention: false,
                     showChangePW:false,
                     showCollect:false,
                     showPublications:false,
-                    showNewsList:false
-                }
+                    showNewsList:false,
+                },
+                imgsPoto:''
             }
         },
         components: {
             Perinfo,
+            HeadPortrait,
             Attention,
             ChangePW,
             Collect,
@@ -73,6 +79,13 @@
                 })
                 this.$router.go(0)
             }
+        },
+        mounted() {
+            passportavatar(localStorage.userId).then(res => {
+                console.log(res);
+                this.imgsPoto = res.data
+                this.imgsPoto = 'data:image/png;base64,' + btoa(new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), ''))
+            })
         }
     }
 </script>
@@ -91,6 +104,10 @@
         height 100px
         border-radius 50px
         background-color #fff
+        .hImg
+            width 100px
+            height 100px
+            border-radius 50px
     .left
         width 20%
         height 400px

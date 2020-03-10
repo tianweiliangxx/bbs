@@ -7,131 +7,40 @@
                         <div class="box_wrap">
                             <h3>步行街</h3>
                             <div class="num">
-                                今日：<span>7</span>&nbsp;&nbsp;
-                                总贴：<span>342352</span>
+                                总贴：<span>{{post_dict_liLength * totalPage}}</span>
                             </div>
-                            <div class="moderator">版主：<span>孙胜利</span></div>
                             <div class="notice">放松一下吧</div>
                         </div>
                         <div style="clear:both;"></div>
                         <!-- 帖子列表 -->
                         <ul class="postsList">
-                            <li>
+                            <li v-for="(item, index) in this.data.post_dict_li">
                                 <div class="smallPic">
                                     <a href="#">
-                                        <img width="45" height="45"src="/imgs/bdimg.jpeg">
+                                        <img width="45" height="45" :src="'data:image/png;base64,'+ item.img">
                                     </a>
                                 </div>
                                 <div class="subject">
-                                    <div class="titleWrap"><a href="#">[分类]</a>&nbsp;&nbsp;<h2><a href="#">我这篇帖子不错哦</a></h2></div>
+                                    <div class="titleWrap"><a href="#">[步行街]</a>&nbsp;&nbsp;<h2><router-link :to=" { path:'/index/article', query: {id: item.id} }">{{item.title}}</router-link></h2></div>
                                     <p>
-                                        楼主：闫海亮&nbsp;2014-12-08&nbsp;&nbsp;&nbsp;&nbsp;最后回复：2014-12-08
+                                        发表时间：{{item.create_time}}
                                     </p>
                                 </div>
                                 <div class="count">
                                     <p>
-                                        回复<br /><span>41</span>
-                                    </p>
-                                    <p>
-                                        浏览<br /><span>896</span>
-                                    </p>
-                                </div>
-                                <div style="clear:both;"></div>
-                            </li>
-                            <li>
-                                <div class="smallPic">
-                                    <a href="#">
-                                        <img width="45" height="45"src="/imgs/bdimg.jpeg">
-                                    </a>
-                                </div>
-                                <div class="subject">
-                                    <div class="titleWrap"><a href="#">[分类]</a>&nbsp;&nbsp;<h2><a href="#">我这篇帖子不错哦</a></h2></div>
-                                    <p>
-                                        楼主：闫海亮&nbsp;2014-12-08&nbsp;&nbsp;&nbsp;&nbsp;最后回复：2014-12-08
-                                    </p>
-                                </div>
-                                <div class="count">
-                                    <p>
-                                        回复<br /><span>41</span>
-                                    </p>
-                                    <p>
-                                        浏览<br /><span>896</span>
-                                    </p>
-                                </div>
-                                <div style="clear:both;"></div>
-                            </li>
-                            <li>
-                                <div class="smallPic">
-                                    <a href="#">
-                                        <img width="45" height="45"src="/imgs/bdimg.jpeg">
-                                    </a>
-                                </div>
-                                <div class="subject">
-                                    <div class="titleWrap"><a href="#">[分类]</a>&nbsp;&nbsp;<h2><a href="#">我这篇帖子不错哦</a></h2></div>
-                                    <p>
-                                        楼主：闫海亮&nbsp;2014-12-08&nbsp;&nbsp;&nbsp;&nbsp;最后回复：2014-12-08
-                                    </p>
-                                </div>
-                                <div class="count">
-                                    <p>
-                                        回复<br /><span>41</span>
-                                    </p>
-                                    <p>
-                                        浏览<br /><span>896</span>
-                                    </p>
-                                </div>
-                                <div style="clear:both;"></div>
-                            </li>
-                            <li>
-                                <div class="smallPic">
-                                    <a href="#">
-                                        <img width="45" height="45"src="/imgs/bdimg.jpeg">
-                                    </a>
-                                </div>
-                                <div class="subject">
-                                    <div class="titleWrap"><a href="#">[分类]</a>&nbsp;&nbsp;<h2><a href="#">我这篇帖子不错哦</a></h2></div>
-                                    <p>
-                                        楼主：闫海亮&nbsp;2014-12-08&nbsp;&nbsp;&nbsp;&nbsp;最后回复：2014-12-08
-                                    </p>
-                                </div>
-                                <div class="count">
-                                    <p>
-                                        回复<br /><span>41</span>
-                                    </p>
-                                    <p>
-                                        浏览<br /><span>896</span>
-                                    </p>
-                                </div>
-                                <div style="clear:both;"></div>
-                            </li>
-                            <li>
-                                <div class="smallPic">
-                                    <a href="#">
-                                        <img width="45" height="45"src="/imgs/bdimg.jpeg">
-                                    </a>
-                                </div>
-                                <div class="subject">
-                                    <div class="titleWrap"><a href="#">[分类]</a>&nbsp;&nbsp;<h2><a href="#">我这篇帖子不错哦</a></h2></div>
-                                    <p>
-                                        楼主：闫海亮&nbsp;2014-12-08&nbsp;&nbsp;&nbsp;&nbsp;最后回复：2014-12-08
-                                    </p>
-                                </div>
-                                <div class="count">
-                                    <p>
-                                        回复<br /><span>41</span>
-                                    </p>
-                                    <p>
-                                        浏览<br /><span>896</span>
+                                        点击量<br /><span>{{item.clicks}}</span>
                                     </p>
                                 </div>
                                 <div style="clear:both;"></div>
                             </li>
                         </ul>
                         <!-- 分页 -->
-                        <div class="block">
+                        <div class="pages">
                             <el-pagination
                                     layout="prev, pager, next"
-                                    :total="50">
+                                    :total='post_dict_liLength * totalPage'
+                                    :page-size="5"
+                                    @current-change="changePage">
                             </el-pagination>
                         </div>
                     </div>
@@ -141,12 +50,7 @@
             <div class="right">
                 <ul>
                     <li class="rank"><div class="rankIcon"><i class="el-icon-s-marketing"></i></div>  点击排行</li>
-                    <li class="rank"><div class="rankIcon1"><i class="iconfont icon-1"></i></div>  新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1</li>
-                    <li class="rank"><div class="rankIcon2"><i class="iconfont icon-2"></i></div>  新闻2</li>
-                    <li class="rank"><div class="rankIcon3"><i class="iconfont icon-3"></i></div>  新闻2</li>
-                    <li class="rank"><div class="rankIcon4"><i class="iconfont icon-4"></i></div>  新闻2</li>
-                    <li class="rank"><div class="rankIcon4"><i class="iconfont icon-5"></i></div>  新闻2</li>
-                    <li class="rank"><div class="rankIcon4"><i class="iconfont icon-6"></i></div>  新闻2</li>
+                    <li class="rank" v-for="(item, index) in this.dataUserHot"><div :class="calculate(index, 'div')"><i :class="calculate(index, 'icon')"></i></div><router-link  :to="{path:'/index/article',query:{id: item.id}}">{{item.title}}</router-link></li>
                 </ul>
             </div>
         </div>
@@ -154,8 +58,53 @@
 </template>
 
 <script>
+    import {
+        postList,
+        getUserHot
+    } from '../../api/index'
     export default {
-        name: "Relaxation"
+        name: "Relaxation",
+        data () {
+            return {
+                data: '',
+                dataUserHot:'',
+                post_dict_li:'',
+                post_dict_liLength: '',
+                totalPage:''
+            }
+        },
+        methods: {
+            calculate(index, type){
+                if (type === 'icon') {
+                    index = index + 1
+                    return 'iconfont icon-' + index
+                }
+                if (type === 'div') {
+                    index = index + 1
+                    return 'rankIcon' + index
+                }
+            },
+            changePage(e){
+                postList(3, e, 5).then(res => {
+                    console.log(res);
+                    this.data = res.data.data
+                    this.post_dict_li = res.data.data.post_dict_li
+                })
+            }
+        },
+        beforeCreate () {
+            postList(3,1,5).then(res => {
+                console.log(res);
+                this.data = res.data.data
+                this.post_dict_li = res.data.data.post_dict_li
+                this.post_dict_liLength = res.data.data.post_dict_li.length
+                this.totalPage = res.data.data.total_page
+            })
+            getUserHot().then(res => {
+                console.log(res);
+                this.dataUserHot = res.data.data.news_dict_li
+            })
+        }
     }
 </script>
 
@@ -304,6 +253,10 @@
                     background:#999;
                     color:#fff;
                 }
+                .pages
+                    position: absolute
+                    bottom 100px
+                    left 300px
             .right
                 width 30%
                 height 450px
@@ -355,6 +308,16 @@
                     .icon-3
                         font-size 28px
                 .rankIcon4
+                    position: relative
+                    display: inline
+                    color rgb(66, 152, 242)
+                    border-radius 5px
+                .rankIcon5
+                    position: relative
+                    display: inline
+                    color rgb(66, 152, 242)
+                    border-radius 5px
+                .rankIcon6
                     position: relative
                     display: inline
                     color rgb(66, 152, 242)

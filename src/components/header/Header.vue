@@ -1,6 +1,6 @@
 <template>
     <div class="header">
-        <div class="title"><span>新闻社区</span></div>
+        <div class="title"><span>交流社区</span></div>
         <div class="headerNP">
             <HeaderNav></HeaderNav>
             <HeaderPer></HeaderPer>

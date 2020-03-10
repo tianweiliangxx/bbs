@@ -17,7 +17,7 @@
                             <li v-for="(item, index) in this.data.post_dict_li">
                                 <div class="smallPic">
                                     <a href="#">
-                                        <img width="45" height="45"src="/imgs/bdimg.jpeg">
+                                        <img width="45" height="45" :src="item.img">
                                     </a>
                                 </div>
                                 <div class="subject">

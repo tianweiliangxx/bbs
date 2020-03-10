@@ -23,6 +23,8 @@
                     </el-form-item>
                 </el-form>
             </div>
+            <div class="tip">您是普通用户?
+                <router-link to="/index/login" class="toReg">请前往普通用户登录</router-link></div>
         </div>
     </div>
 </template>

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 
-axios.defaults.baseURL = 'http://67.229.93.15:12365/'
+axios.defaults.baseURL = 'http://127.0.0.1:5001/'
 
 export let login = function (mobile, password) {
     return axios.post('v1/passport/login',{
@@ -54,6 +54,10 @@ export let commentLike = function (user_id, action, comment_id) {
 export let followedUser = function (user_id, action, target_id) {
     return axios.get('/v1/post/followed_user' + '?' + 'user_id=' + user_id + '&' + 'action=' + action + '&' + 'target_id=' + target_id)
 }
+// 获取用户头像passportavatar
+export let passportavatar = function (user_id) {
+    return axios.get('/v1/passport/avatar' + '?' + 'user_id=' + user_id,{responseType: 'arraybuffer',})
+}
 
 //用户资料修改
 export let baseInfo = function (user_id, nick_name, signature, gender) {
@@ -63,6 +67,13 @@ export let baseInfo = function (user_id, nick_name, signature, gender) {
 // 密码修改
 export let passInfo = function (user_id, old_password, new_password) {
     return axios.post('/v1/profile/pass_info' + '?' + 'user_id=' + user_id + '&' + 'old_password=' + old_password + '&' + 'new_password=' + new_password)
+}
+
+// 头像设置/v1/profile/pic_info
+export let picInfo = function (user_id, avatar) {
+    let formData = new FormData()
+    formData.append("avatar",avatar)
+    return axios.post('/v1/profile/pic_info' + '?' + 'user_id=' + user_id, formData, { headers: { 'Content-Typ': 'application/x-www-form-urlencoded'} })
 }
 
 // 关注列表
@@ -142,4 +153,9 @@ export let adminPostList = function (user_id,page,keywords) {
 // 删除帖子
 export let postDel = function (user_id, post_id) {
     return axios.get('/v1/admin/post_del' + '?' + 'user_id=' + user_id + '&' + 'post_id=' + post_id)
+}
+
+// 获取文章图片
+export let getPostImg = function (post_id) {
+    return axios.get('/v1/post/get_post_img' + '?' + 'post_id=' + post_id,{responseType: 'arraybuffer',})
 }

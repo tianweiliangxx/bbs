@@ -16,7 +16,7 @@
             </el-select>
             <form  id="myForm" action="">
                 选择插图：
-                <el-input id="imgFile" v-model="index_image" @change="getFile($event)" type="file" placeholder="请输入内容" style="width:50%"></el-input>
+                <el-input id="imgFiles" v-model="index_image" @change="getFile($event)" type="file" placeholder="请输入内容" style="width:50%"></el-input>
             </form>
         </div>
         <div class="content">
@@ -68,16 +68,15 @@
             onEditorFocus(){}, // 获得焦点事件
             onEditorChange(){}, // 内容改变事件
             issue () {
-                console.log(this.content)
-                var file = document.getElementById("imgFile").files[0]; //获取文件
+                var file = document.getElementById("imgFiles").files[0]; //获取文件
+                console.log(document.getElementById("imgFiles").files)
                 newsRelease(localStorage.userId, this.title, this.digest, this.content, this.category_id, file).then(res => {
-                    alert('发布成功')
+                    alert(res.data.errmsg)
                     console.log(res);
                 })
             },
             getFile(event) {
-
-                // console.log(this.index_image);
+                console.log(event);
             },
         },
         computed: {

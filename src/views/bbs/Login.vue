@@ -25,6 +25,8 @@
             </div>
             <div class="tip">没有账号?
                 <router-link to="/index/register" class="toReg">请注册</router-link></div>
+            <div class="tip">您是管理员?
+                <router-link to="/main/manlogin" class="toReg">请前往管理员登录</router-link></div>
         </div>
     </div>
 </template>
@@ -76,7 +78,7 @@
                                 setTimeout(() => {
                                     alert('登录成功')
                                     this.$router.push({
-                                        path: "/index/newest"
+                                        path: "/index/cba"
                                     });
                                 }, 400);
                             }

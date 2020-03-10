@@ -11,6 +11,9 @@
                     <p><b>概要：{{this.postInfo.digest}}</b></p>
                     <p>新闻内容:</p>
                     <div v-html="this.postInfo.content"></div>
+                    <div>
+                        <img class="postImg" :src="imgsPoto" alt="">
+                    </div>
                 </div>
                 <div class="collect">
                     <el-button v-if="!this.data.is_collected" @click="followed(postInfo.id, 'collect')" type="primary" icon="el-icon-star-off" round>收藏</el-button>
@@ -42,12 +45,7 @@
             <div class="right">
                 <ul>
                     <li class="rank"><div class="rankIcon"><i class="el-icon-s-marketing"></i></div>  点击排行</li>
-                    <li class="rank"><div class="rankIcon1"><i class="iconfont icon-1"></i></div>  新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1新闻1</li>
-                    <li class="rank"><div class="rankIcon2"><i class="iconfont icon-2"></i></div>  新闻2</li>
-                    <li class="rank"><div class="rankIcon3"><i class="iconfont icon-3"></i></div>  新闻2</li>
-                    <li class="rank"><div class="rankIcon4"><i class="iconfont icon-4"></i></div>  新闻2</li>
-                    <li class="rank"><div class="rankIcon4"><i class="iconfont icon-5"></i></div>  新闻2</li>
-                    <li class="rank"><div class="rankIcon4"><i class="iconfont icon-6"></i></div>  新闻2</li>
+                    <li class="rank" v-for="(item, index) in this.dataUserHot"><div :class="calculate(index, 'div')"><i :class="calculate(index, 'icon')"></i></div><router-link  :to="{path:'/index/article',query:{id: item.id}}">{{item.title}}</router-link></li>
                 </ul>
             </div>
         </div>
@@ -59,7 +57,9 @@
         postDetail,
         newsCollect,
         newsComment,
-        commentLike
+        commentLike,
+        getUserHot,
+        getPostImg
     } from '../../api/index'
     import { mapState } from 'vuex'
     export default {
@@ -73,13 +73,25 @@
                 postInfo:'',
                 author:'',
                 comments:'',
-                commentId: ''
+                commentId: '',
+                dataUserHot:'',
+                imgsPoto:''
             }
         },
         computed: {
             ...mapState(['isLogin', 'userInfo']),
         },
         methods: {
+            calculate(index, type){
+                if (type === 'icon') {
+                    index = index + 1
+                    return 'iconfont icon-' + index
+                }
+                if (type === 'div') {
+                    index = index + 1
+                    return 'rankIcon' + index
+                }
+            },
             followed (id, type) {
                 let oneself = this
                 newsCollect(id, type, localStorage.userId).then(res => {
@@ -94,13 +106,13 @@
                 if (this.commented === ''){
                     newsComment(localStorage.userId, this.id, this.input).then(res => {
                         console.log(res);
-                        alert('评论成功')
+                        alert(res.data.errmsg)
                         oneself.$router.go(0)
                     })
                 }else{
                     newsComment(localStorage.userId, this.id, this.commentId, this.input).then(res => {
                         console.log(res);
-                        alert(oneself.inputTip + '评论成功')
+                        alert(oneself.inputTip + res.data.errmsg)
                         oneself.$router.go(0)
                     })
                 }
@@ -131,6 +143,11 @@
                     return true
                 }
             },
+            tipUser(){
+                if(!localStorage.userId){
+                    this.inputTip = '请登录后评论'
+                }
+            }
         },
         created() {
             postDetail(this.id, localStorage.userId).then(res => {
@@ -140,7 +157,16 @@
                 this.author = res.data.data.post.author
                 this.comments = res.data.data.comments
             })
-        }
+            getUserHot().then(res => {
+                console.log(res);
+                this.dataUserHot = res.data.data.news_dict_li
+            })
+            getPostImg(this.id).then(res => {
+                console.log(res);
+                this.imgsPoto = 'data:image/png;base64,' + btoa(new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), ''))
+            })
+            this.tipUser()
+        },
     }
 </script>
 
@@ -160,6 +186,10 @@
                 margin-bottom 60px
                 .card
                     margin 10px
+                    .postImg
+                        width 400px
+                        height 300px
+                        margin-left 150px
                 .collect
                     display inline
                     margin-left 306px
@@ -204,8 +234,9 @@
                                         cursor: pointer
             .right
                 width 30%
-                height 619px
+                height 500px
                 margin-left 8%
+                margin-top 40px
                 background-color #fff
                 float left
             ul
@@ -252,6 +283,16 @@
                     .icon-3
                         font-size 28px
                 .rankIcon4
+                    position: relative
+                    display: inline
+                    color rgb(66, 152, 242)
+                    border-radius 5px
+                .rankIcon5
+                    position: relative
+                    display: inline
+                    color rgb(66, 152, 242)
+                    border-radius 5px
+                .rankIcon6
                     position: relative
                     display: inline
                     color rgb(66, 152, 242)

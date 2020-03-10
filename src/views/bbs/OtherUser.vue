@@ -1,7 +1,7 @@
 <template>
     <div class="personal">
         <div class="headImg">
-
+            <img class="hImg" :src="this.imgsPoto" alt="">
         </div>
         <div class="left">
             <ul class="menu">
@@ -26,7 +26,8 @@
     import PostList from '../../components/otheruser/PostList'
     import {
         otherInfo,
-        followedUser
+        followedUser,
+        passportavatar
     } from '../../api/index'
     export default {
         name: "OtherUser",
@@ -34,7 +35,8 @@
             return {
                 id: this.$route.query.id,
                 otherInfo:'',
-                isFollow:''
+                isFollow:'',
+                imgsPoto:''
             }
         },
         components: {
@@ -67,8 +69,17 @@
         mounted() {
             otherInfo(localStorage.userId,this.id).then(res => {
                 console.log(res);
+                if (res.data.errmsg === '未登录') {
+                    alert('请登录')
+                    this.$router.go(-1)
+                }
                 this.isFollow = res.data.data.is_followed
                 this.otherInfo = res.data.data.other_info
+            })
+            passportavatar(localStorage.userId).then(res => {
+                console.log(res);
+                this.imgsPoto = res.data
+                this.imgsPoto = 'data:image/png;base64,' + btoa(new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), ''))
             })
         }
     }
@@ -88,6 +99,10 @@
             height 100px
             border-radius 50px
             background-color #fff
+            .hImg
+                width 100px
+                height 100px
+                border-radius 50px
         .left
             width 20%
             height 400px

@@ -10,7 +10,7 @@
                     <th>最后登录时间</th>
                 </tr>
                 <tr class="user" v-for="(item,index) in UserManagementData.users">
-                    <th>{{item.nick_name}}</th>
+                    <th><router-link :to="{path:'/index/otheruser', query: {id: item.id}}">{{item.nick_name}}</router-link></th>
                     <th>{{item.mobile}}</th>
                     <th>{{item.register}}</th>
                     <th>{{item.last_login}}</th>
